@@ -2,8 +2,8 @@
 import os
 os.environ['LANGCHAIN_TRACING_V2'] = 'true'
 os.environ['LANGCHAIN_ENDPOINT'] = 'https://api.smith.langchain.com'
-os.environ['LANGCHAIN_API_KEY'] = '<your_langchain_api_key>'
-os.environ['OPENAI_API_KEY'] = '<your_openai_api_key>'
+os.environ['LANGCHAIN_API_KEY'] = '<your_lang_chain_key>'
+os.environ['OPENAI_API_KEY'] = '<your_openai_key>'
 
 import bs4
 from langchain import hub
@@ -71,5 +71,9 @@ rag_chain = (
     | StrOutputParser()
 )
 
-# Question
-print(rag_chain.invoke("Who smiled warmly in the story?"))
+while True:
+    user_input = input("Ask a question (or enter 'x' to quit): ")
+    if user_input == "x":
+        break
+
+    print(rag_chain.invoke(user_input))
