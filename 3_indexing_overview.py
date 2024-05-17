@@ -2,8 +2,8 @@
 import os
 os.environ['LANGCHAIN_TRACING_V2'] = 'true'
 os.environ['LANGCHAIN_ENDPOINT'] = 'https://api.smith.langchain.com'
-os.environ['LANGCHAIN_API_KEY'] = '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'
-os.environ['OPENAI_API_KEY'] = 'sk-proj-Mz17A5AemRPGtiezpWBIT3BlbkFJuZZIic7IqmgiEhy7cL24'
+os.environ['LANGCHAIN_API_KEY'] = '<your_lang_chain_key>'
+os.environ['OPENAI_API_KEY'] = '<your_openai_key>'
 
 import bs4
 from langchain import hub
