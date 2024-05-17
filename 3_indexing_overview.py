@@ -2,8 +2,8 @@
 import os
 os.environ['LANGCHAIN_TRACING_V2'] = 'true'
 os.environ['LANGCHAIN_ENDPOINT'] = 'https://api.smith.langchain.com'
-os.environ['LANGCHAIN_API_KEY'] = '<your_lang_chain_key>'
-os.environ['OPENAI_API_KEY'] = '<your_openai_key>'
+os.environ['LANGCHAIN_API_KEY'] = '<your_langchain_api_key>'
+os.environ['OPENAI_API_KEY'] = '<your_openai_api_key>'
 
 import bs4
 from langchain import hub
@@ -17,19 +17,20 @@ from langchain_openai import ChatOpenAI, OpenAIEmbeddings
 #### INDEXING ####
 
 # Here we load our document from the web simply by providing the URL to a webpage.
+# The SoupStrainer here filters the html doc on the class markdown-body and entry-content. 
+# This way, we can filter out a lot of the noise from the webpage for our vectorstore
 loader = WebBaseLoader(
-    web_paths=("https://lilianweng.github.io/posts/2023-06-23-agent/",),
+    web_paths=("https://github.com/ReeceGibbsGit/RAG_Breakdown/blob/master/Example%20Docs/example.md",),
     bs_kwargs=dict(
-        parse_only=bs4.SoupStrainer(
-            class_=("post-content", "post-title", "post-header")
-        )
+        parse_only=bs4.SoupStrainer("p")
     ),
 )
+
 docs = loader.load()
 
 # We then split the document into smaller chunks to be embedded.
 # We do this because the OpenAI Embedding model has a limit on the number of tokens it can process at once.
-text_splitter = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=200)
+text_splitter = RecursiveCharacterTextSplitter(chunk_size=100, chunk_overlap=20)
 splits = text_splitter.split_documents(docs)
 
 # We then pass the splits, a list of documents, to the chroma vectorstore.
@@ -57,7 +58,7 @@ llm = ChatOpenAI(model_name="gpt-3.5-turbo", temperature=0)
 # Look how it has cut out the fluff and managed to keep the relevant information.
 def format_docs(docs):
     relevant_doc_retrieval = "\n\n".join(doc.page_content for doc in docs)
-    print(relevant_doc_retrieval)
+    # print(relevant_doc_retrieval)
 
     return relevant_doc_retrieval
 
@@ -71,4 +72,4 @@ rag_chain = (
 )
 
 # Question
-print(rag_chain.invoke("What is Task Decomposition?"))
+print(rag_chain.invoke("Who smiled warmly in the story?"))
