@@ -1,5 +1,11 @@
 # Below is an example of converting text to embeddings.
 # Each result returns a fixed length vector that represents the semantics of the text.
+import os
+os.environ['LANGCHAIN_TRACING_V2'] = 'true'
+os.environ['LANGCHAIN_ENDPOINT'] = 'https://api.smith.langchain.com'
+os.environ['LANGCHAIN_API_KEY'] = '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'
+os.environ['OPENAI_API_KEY'] = 'sk-proj-fERHt7WuVXnUpTS1upNKT3BlbkFJqHIMrGosXD1Xo1hxNEJR'
+
 import numpy as np
 
 question = "What kinds of pets do I like?"

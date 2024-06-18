@@ -2,10 +2,9 @@
 import os
 os.environ['LANGCHAIN_TRACING_V2'] = 'true'
 os.environ['LANGCHAIN_ENDPOINT'] = 'https://api.smith.langchain.com'
-os.environ['LANGCHAIN_API_KEY'] = '<your_lang_chain_key>'
-os.environ['OPENAI_API_KEY'] = '<your_openai_key>'
+os.environ['LANGCHAIN_API_KEY'] = ''
+os.environ['OPENAI_API_KEY'] = ''
 
-import bs4
 from langchain import hub
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain_community.document_loaders import WebBaseLoader
@@ -20,10 +19,7 @@ from langchain_openai import ChatOpenAI, OpenAIEmbeddings
 # The SoupStrainer here filters the html doc on the class markdown-body and entry-content. 
 # This way, we can filter out a lot of the noise from the webpage for our vectorstore
 loader = WebBaseLoader(
-    web_paths=("https://github.com/ReeceGibbsGit/RAG_Breakdown/blob/master/Example%20Docs/example.md",),
-    bs_kwargs=dict(
-        parse_only=bs4.SoupStrainer("p")
-    ),
+    web_paths=("https://raw.githubusercontent.com/ReeceGibbsGit/RAG_Breakdown/master/Example%20Docs/example.md",)
 )
 
 docs = loader.load()
@@ -58,8 +54,6 @@ llm = ChatOpenAI(model_name="gpt-3.5-turbo", temperature=0)
 # Look how it has cut out the fluff and managed to keep the relevant information.
 def format_docs(docs):
     relevant_doc_retrieval = "\n\n".join(doc.page_content for doc in docs)
-    # print(relevant_doc_retrieval)
-
     return relevant_doc_retrieval
 
 # Here we defined the chain of operations we want to perform on the input.
